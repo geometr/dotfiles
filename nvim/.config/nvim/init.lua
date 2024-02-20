@@ -1,2 +1,5 @@
-require('options')
-require('plugins')
+require('base/search')
+require('base/tabs')
+require('base/other')
+require('base/options')
+require('base/plugins')

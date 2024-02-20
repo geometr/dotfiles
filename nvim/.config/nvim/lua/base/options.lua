@@ -1,19 +1,36 @@
-vim.wo.colorcolumn = '80'
-local set = vim.opt
-set.number = true
-set.relativenumber = true
-set.tabstop = 4
-set.shiftwidth = 4
-set.softtabstop = 0
-set.expandtab = true
-set.swapfile = false
+--[[ Переменные ]]--
+-- Переменная для настройки опций Neovim
+-- Все время использовать vim.opt - не удобно, поэтому сделаем алиас
+local opt = vim.opt
+
+-- Глобальные переменные
+-- То же самое делаем и с vim.global
+local g = vim.g
 
 local opts = { noremap=true, silent=true }
+
+local map = vim.api.nvim_set_keymap
+
+function nm(key, command)
+    map('n', key, command, {noremap = true})
+end
+
+function im(key, command)
+    map('i', key, command, {noremap = true})
+end
+
+function vm(key, command)
+    map('v', key, command, {noremap = true})
+end
+
+function tm(key, command)
+    map('t', key, command, {noremap = ture})
+end
+
 vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
 vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
-vim.opt.showmode = false
 
 require('lualine').setup({
   options = {
@@ -23,6 +40,7 @@ require('lualine').setup({
     section_separators = '',
   },
 })
+
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
