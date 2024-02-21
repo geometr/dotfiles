@@ -46,4 +46,4 @@ vim.api.nvim_set_option_value("colorcolumn", "79", {})
 -- Подключения проверки синтаксиса
 opt.spelllang = { 'en_ru', 'ru' }
 
-vim.cmd[[colorscheme dracula]]
+vim.cmd.colorscheme("dracula")
