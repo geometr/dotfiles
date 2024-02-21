@@ -1,6 +1,5 @@
 require('base/search')
 require('base/tabs')
 require('base/other')
-require('keys/alias.lua')
-require('base/options')
-require('base/plugins')
+require('plugins/packer_install')
+require('keys/main')

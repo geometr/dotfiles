@@ -1,7 +1,4 @@
 return require('packer').startup(function()
-  use 'wbthomason/packer.nvim'
-  use 'OmniSharp/omnisharp-vim'
-  use 'neovim/nvim-lspconfig' 
   use 'tpope/vim-fugitive'
   use 'neoclide/coc.nvim'
   use 'wakatime/vim-wakatime'
