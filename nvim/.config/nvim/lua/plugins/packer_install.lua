@@ -69,6 +69,8 @@ return require('packer').startup(function()
       },
   })
 
+  use 'wakatime/vim-wakatime'
+
   use 'Mofiqul/dracula.nvim'
 
   use {
