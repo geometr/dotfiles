@@ -50,3 +50,5 @@ alias gb='git checkout -b'
 
 # View the difference.
 alias gd='git diff'
+
+alias fvi='nvim $(find . /etc ~ | fzf)'
