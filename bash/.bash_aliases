@@ -51,4 +51,5 @@ alias gb='git checkout -b'
 # View the difference.
 alias gd='git diff'
 
-alias fvi='nvim $(find . /etc ~ | fzf)'
+alias fvi='nvim $(find . /etc ~ -not -path "*.pyc" -not -path "*/_cacache/*" -not -path "*/.cache/*" -not -path "*/.git/*" 2>&1 | grep -v "Permission denied" | fzf)'
+
