@@ -14,27 +14,31 @@ Development tools: Support for Python, Node.js (via pyenv and nvm), and others.
 
 Clone the repository:
 
+```
 git clone https://github.com/geometr/dotfiles.git ~/dotfiles
+```
 
 Backup existing dotfiles:
 
+```
 mv ~/.bashrc ~/.bashrc.bak
 mv ~/.bash_aliases ~/.bash_aliases.bak
 mv ~/.bash_logout ~/.bash_logout.bak
 mv ~/.bash_profile ~/.bash_profile.bak
+```
 
 Run install.sh script
-
+```
 install.sh
-
+```
 Install Neovim and other dependencies if needed:
-
+```
 sudo pacman -S neovim git ranger tmux
-
+```
 Source the configuration:
-
+```
 source ~/.bashrc
-
+```
 ## Usage
 
 ### Bash
@@ -45,17 +49,13 @@ Timer: Track command execution times automatically.
 
 Prompt: Includes Git branch info and color-coded structure.
 
-Neovim
+### Neovim
 
 Launch Neovim with nvim.
 
 Configuration is located in ~/.config/nvim/init.vim or ~/.config/nvim/init.lua.
 
 
-Contributing
+# Contributing
 
 This repository is personal, but feel free to fork and adapt for your own use. If you have suggestions, create an issue or pull request.
-
-License
-
-MIT License. See LICENSE for details.
