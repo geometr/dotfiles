@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Color definition for the prompt
 blk='\[\033[01;30m\]'   # Black
 red='\[\033[01;31m\]'   # Red
 grn='\[\033[01;32m\]'   # Green
@@ -45,8 +46,37 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
+if [ -f /usr/share/git/git-prompt.sh ]; then
+  . /usr/share/git/git-prompt.sh 
+fi
+
+TIMER_START=0
+
+last_command_time(){
+  if [[ "$TIMER_START" -ne 0 ]]; then
+    local TIMER_END=$(date +%s%3N)
+    local DURATION=$((TIMER_END - TIMER_START))
+
+    if [[ "$DURATION" -lt 0 ]]; then
+      DURATION=0
+    fi
+
+    if [ "$DURATION" -ge 1000 ]; then
+      echo -e "\033[33m Command took $(bc <<< "scale=2; $DURATION/1000") seconds \033[0m"
+    else
+      echo -e "\033[33m Command took ${DURATION}ms \033[0m"
+    fi
+  fi
+ TIMER_START=$(date +%s%3N)
+}
+
+
+if [[ ! "$PROMPT_COMMAND" =~ last_command_time ]]; then
+  PROMPT_COMMAND="last_command_time; $PROMPT_COMMAND" 
+fi
+
 if [ "$color_prompt" = "yes" ]; then
-    PS1="${debian_chroot:+($debian_chroot)}$grn\u@\h$clr:$blu\w$clr\$ "
+  PS1="${debian_chroot:+($debian_chroot)}$grn\u@\h$clr:$blu\w$ylw\$(__git_ps1 ' (%s)')$clr\$ "
 else
     PS1="${debian_chroot:+($debian_chroot)}\u@\h:\W\$ "
 fi
@@ -73,7 +103,7 @@ fi
 
 # Extract files from any archive
 # Usage: ex <archive_name>
-ex () {
+extract () {
 if [ -f "$1" ] ; then
 case $1 in
 *.tar.bz2) tar xjf "$1" ;;
@@ -87,32 +117,49 @@ case $1 in
 *.zip) unzip "$1" ;;
 *.Z) uncompress "$1" ;;
 *.7z) 7z x "$1" ;;
-*) echo "'$1' cannot be extracted via extract()" ;;
+*) echo "Unsupported archive format: '$1'" ;;
 esac
 else
-echo "'$1' is not a valid file"
+echo "File not found: '$1'"
 fi
 }
+alias ex='extract'
 
 export HISTTIMEFORMAT="%F %T "
-export HISTCONTROL=ignoredups:ignorespace
-export HISTSIZE=2000
-export HISTFILESIZE=2000
+export HISTCONTROL=ignoreboth:erasedups
+export HISTSIZE=5000
+export HISTFILESIZE=10000
 export HISTIGNORE="&:ls:[bf]g:exit"
-
 shopt -s histappend
+if [[ ! "$PROMPT_COMMAND" =~ "history -a" ]]; then
+  PROMPT_COMMAND="$PROMPT_COMMAND history -a;"
+fi
+if [[ ! "$PROMPT_COMMAND" =~ "history -n" ]]; then
+  PROMPT_COMMAND="$PROMPT_COMMAND history -n;"
+fi
+
 shopt -s checkwinsize
 shopt -s cdspell
 
 #prevent core dumps
 ulimit -c 0
 
+export EDITOR=nvim
+export VISUAL=nvim
 export MESA_GL_VERSION_OVERRIDE=4.5
+
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-export EDITOR=nvim;
-export VISUAL=nvim;
-export PNPM_HOME="/home/sinclair/.local/share/pnpm"
-export PATH="$PNPM_HOME:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
+
+export PNPM_HOME="$HOME/.local/share/pnpm"
+export PATH="$HOME/.local/bin:$PNP_HOME:$PATH"
+
+alias rm='rm -i'
+alias mv='mv -i'
+alias cp='cp -i'
+
+if [ -f /usr/share/bash-completion/bash_completion ]; then
+  .  /usr/share/bash-completion/bash_completion
+fi
+
