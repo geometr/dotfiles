@@ -140,13 +140,6 @@ export HISTSIZE=5000
 export HISTFILESIZE=10000
 export HISTIGNORE="&:ls:[bf]g:exit"
 shopt -s histappend
-#if [[ ! "$PROMPT_COMMAND" =~ "history -a" ]]; then
-#  PROMPT_COMMAND="$PROMPT_COMMAND history -a;"
-#fi
-#if [[ ! "$PROMPT_COMMAND" =~ "history -n" ]]; then
-#  PROMPT_COMMAND="$PROMPT_COMMAND history -n;"
-#fi
-
 shopt -s checkwinsize
 shopt -s cdspell
 
