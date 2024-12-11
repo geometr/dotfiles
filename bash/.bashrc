@@ -51,6 +51,14 @@ if [ -f /usr/share/git/git-prompt.sh ]; then
 fi
 
 TIMER_START=0
+IS_FIRST_COMMAND=true
+trap 'update_timer_start' DEBUG
+update_timer_start() {
+  if [ "$IS_FIRST_COMMAND" = true ]; then
+    TIMER_START=$(date +%s%3N)
+    IS_FIRST_COMMAND=false
+  fi
+}
 
 last_command_time(){
   if [[ "$TIMER_START" -ne 0 ]]; then
@@ -67,13 +75,14 @@ last_command_time(){
       echo -e "\033[33m Command took ${DURATION}ms \033[0m"
     fi
   fi
- TIMER_START=$(date +%s%3N)
+  IS_FIRST_COMMAND=true
 }
 
 
-if [[ ! "$PROMPT_COMMAND" =~ last_command_time ]]; then
-  PROMPT_COMMAND="last_command_time; $PROMPT_COMMAND" 
+if [[ ! "$PROMPT_COMMAND" =~ update_timer_start ]]; then
+  PROMPT_COMMAND="update_timer_start; $PROMPT_COMMAND last_command_time" 
 fi
+
 
 if [ "$color_prompt" = "yes" ]; then
   PS1="${debian_chroot:+($debian_chroot)}$grn\u@\h$clr:$blu\w$ylw\$(__git_ps1 ' (%s)')$clr\$ "
@@ -131,12 +140,12 @@ export HISTSIZE=5000
 export HISTFILESIZE=10000
 export HISTIGNORE="&:ls:[bf]g:exit"
 shopt -s histappend
-if [[ ! "$PROMPT_COMMAND" =~ "history -a" ]]; then
-  PROMPT_COMMAND="$PROMPT_COMMAND history -a;"
-fi
-if [[ ! "$PROMPT_COMMAND" =~ "history -n" ]]; then
-  PROMPT_COMMAND="$PROMPT_COMMAND history -n;"
-fi
+#if [[ ! "$PROMPT_COMMAND" =~ "history -a" ]]; then
+#  PROMPT_COMMAND="$PROMPT_COMMAND history -a;"
+#fi
+#if [[ ! "$PROMPT_COMMAND" =~ "history -n" ]]; then
+#  PROMPT_COMMAND="$PROMPT_COMMAND history -n;"
+#fi
 
 shopt -s checkwinsize
 shopt -s cdspell
