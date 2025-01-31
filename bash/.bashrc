@@ -69,11 +69,14 @@ last_command_time(){
       DURATION=0
     fi
 
-    if [ "$DURATION" -ge 1000 ]; then
-      echo -e "\033[33m Command took $(bc <<< "scale=2; $DURATION/1000") seconds \033[0m"
-    else
-      echo -e "\033[33m Command took ${DURATION}ms \033[0m"
-    fi
+    if [ "$DURATION" -ge 60000 ]; then
+      echo -e "\033[33m Command took $(bc <<< "scale=2; $DURATION/60000") minutes \033[0m"
+    else if [ "$DURATION" -ge 1000 ]; then
+        echo -e "\033[33m Command took $(bc <<< "scale=2; $DURATION/1000") seconds \033[0m"
+      else
+        echo -e "\033[33m Command took ${DURATION}ms \033[0m"
+      fi
+    fi  
   fi
   IS_FIRST_COMMAND=true
 }
